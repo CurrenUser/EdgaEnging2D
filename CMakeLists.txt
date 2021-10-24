@@ -15,5 +15,5 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(external/glwf)
-target_link_libraries(${ENGINE_NAME} GLFW)
+add_subdirectory(external/glfw)
+target_link_libraries(${ENGINE_NAME} glfw)

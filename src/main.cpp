@@ -3,16 +3,21 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Shaders.h"
+#include "Renderer/Shaders.h"
 #include <iostream>
 #include <vector>
-
+#include <string>
 
 
 void WindowResize(GLFWwindow* window, int width, int height);
 void KeyInput(GLFWwindow* window, int key, int scancode, int action, int modes);
 
-int main() {
+int main(int argc, char* argv[] ) {
+
+	std::string path = argv[0];
+	int pos = path.rfind('\\');
+	pos = path.substr(0, pos).rfind('\\');
+	path = path.substr(0, pos);
 
 Shaders shaders; // shader class
 
@@ -106,10 +111,10 @@ const char** glfw_error = nullptr;
 
 
   shaders.CreateShader(Shaders::shader_type::VERTICE);
-  shaders.CompileShader(Shaders::shader_type::VERTICE);
+  shaders.CompileShader(Shaders::shader_type::VERTICE, path + "\\shaders\\default_vertexe.glsl");
 
   shaders.CreateShader(Shaders::shader_type::FRAGMENT);
-  shaders.CompileShader(Shaders::shader_type::FRAGMENT);
+  shaders.CompileShader(Shaders::shader_type::FRAGMENT, path + "\\shaders\\default_fragment.glsl");
 
   shaders.CreateProgram();
   shaders.DeleteShaders();
@@ -144,16 +149,14 @@ const char** glfw_error = nullptr;
 	  shaders.UseProgram();
 	  glBindVertexArray(VAO1);
 	  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-		  glUniform1f(glGetUniformLocation(shaders.GetShaderProgram(), "size"), size);
-		  glUniform4f(glGetUniformLocation(shaders.GetShaderProgram(), "color"),
-			  trangle1_color[0], trangle1_color[1], trangle1_color[2], trangle1_color[3]);
-		  glBindVertexArray(0);
+	  shaders.SetUniForm1f(size, "size");
+	  shaders.SetUniForm4f(trangle1_color[0], trangle1_color[1], trangle1_color[2], trangle1_color[3], "color");
+	  glBindVertexArray(0);
 
 	  glBindVertexArray(VAO2);
 	  glDrawElements(GL_TRIANGLES, indices2.size(), GL_UNSIGNED_INT, 0);
-		  glUniform1f(glGetUniformLocation(shaders.GetShaderProgram(), "size"), size);
-		  glUniform4f(glGetUniformLocation(shaders.GetShaderProgram(), "color"), 
-			  trangle2_color[0], trangle2_color[1], trangle2_color[2], trangle2_color[3]);
+	  shaders.SetUniForm1f(size, "size");
+	  shaders.SetUniForm4f(trangle2_color[0], trangle2_color[1], trangle2_color[2], trangle2_color[3], "color");
 	  glBindVertexArray(0);
 
 	  ImGui::Begin("Triangle settings");

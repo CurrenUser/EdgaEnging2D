@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.4...3.20 FATAL_ERROR)
+message("This cmake file for building lib GLFW")
 
 project(GLFW VERSION 3.4.0 LANGUAGES C)
 
